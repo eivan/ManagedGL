@@ -47,6 +47,32 @@ shader = Factory<VertexPositionColor>.CreateShaderProgram(
 	new FragmentShaders.Color());
 ```
 
+or
+
+```c#
+public class NormalsProgram : ShaderProgram
+{
+	private Uniform modelViewProjectionMatrix;
+	private Uniform normal_length;
+
+	public NormalsProgram()
+		: base()
+	{
+		const string path = "Components/PointCloudShader/";
+		Attach(new Shader(ShaderType.GeometryShader, File.ReadAllText(path + "pc_normals.geom")));
+		Attach(new Shader(ShaderType.VertexShader, File.ReadAllText(path + "pc_normals.vert")));
+		Attach(new Shader(ShaderType.FragmentShader, File.ReadAllText(path + "pc_normals.frag")));
+
+		Factory<VertexPositionNormalColor>.BindVertexAttributeLocations(this);
+		
+		Link();
+
+		modelViewProjectionMatrix = GetUniform("mvp");
+		normal_length = GetUniform("normal_length");
+	}
+// ...
+```
+
 More
 ----
 
